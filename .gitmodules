@@ -1,3 +1,12 @@
 [submodule "mesh_navigation"]
 	path = mesh_navigation
 	url = https://github.com/cjhhalla/mesh_navigation.git
+[submodule "champ"]
+	path = champ
+	url = https://github.com/cjhhalla/champ.git
+[submodule "champ_teleop"]
+	path = champ_teleop
+	url = https://github.com/cjhhalla/champ_teleop.git
+[submodule "mesh_navigation_tutorials"]
+	path = mesh_navigation_tutorials
+	url = https://github.com/cjhhalla/mesh_navigation_tutorials.git
