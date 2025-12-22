@@ -60,7 +60,7 @@ cd ~/ros2_ws
 colcon build --symlink-install
 ```
 
-## 5️⃣ Pull SLAMesh Docker Image
+## 6️⃣ Pull SLAMesh Docker Image
 If you want to use the prebuilt SLAMesh (ROS1) environment:
 ```bash
 pip3 install rosbags
@@ -71,3 +71,14 @@ docker pull junhyeokchoe/slamesh:latest
 cd slam
 ./run.sh
 ```
+
+How to convert ROS2 bag -> ROS1 bag
+```bash
+rosbags-convert \
+  --src rosbag2_2025_11_26-22_10_56/ \
+  --dst ros1_output.bag \
+  --src-typestore ros2_humble \
+  --dst-typestore ros1_noetic
+```
+
+## 7️⃣ Run Navigation & SLAM
