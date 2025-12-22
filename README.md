@@ -31,6 +31,8 @@ sudo apt install -y \
   ros-humble-velodyne \
   ros-humble-velodyne-gazebo-plugins \
   ros-humble-velodyne-description
+
+pip3 install tf-transformations
 ```
 
 ## 2️⃣ Workspace Setup
@@ -70,6 +72,14 @@ docker pull junhyeokchoe/slamesh:latest
 
 cd slam
 ./run.sh
+
+cd /root/Workspaces/slamesh_ws/src/SLAMesh/launch
+
+# in slamesh_online.launch change underline
+# <remap from="/velodyne_points" to="/os_cloud_node/points" />
+roslaunch slamesh_online.launch
+
+rosbag play <your_rosbag>
 ```
 
 How to convert ROS2 bag -> ROS1 bag
@@ -82,3 +92,11 @@ rosbags-convert \
 ```
 
 ## 7️⃣ Run Navigation & SLAM
+```bash
+ros2 launch go2_config gz_lidar_odom.launch.py
+
+ros2 launch mesh_navigation_tutorials mesh_navigation_tutorials_launch.py world_name:=tray
+```
+
+## 8️⃣ Change Mesh Map
+(TBD)
