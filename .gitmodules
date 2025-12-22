@@ -4,6 +4,7 @@
 [submodule "champ"]
 	path = champ
 	url = https://github.com/cjhhalla/champ.git
+	branch = ros2
 [submodule "champ_teleop"]
 	path = champ_teleop
 	url = https://github.com/cjhhalla/champ_teleop.git
