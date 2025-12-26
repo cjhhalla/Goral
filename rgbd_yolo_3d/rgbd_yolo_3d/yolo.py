@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 from ultralytics import YOLO
 
+from std_srvs.srv import SetBool
 from sensor_msgs.msg import Image, CameraInfo
 from geometry_msgs.msg import PoseStamped
 from vision_msgs.msg import Detection3DArray, Detection3D, ObjectHypothesisWithPose
@@ -28,6 +29,7 @@ class LicensePlate3D(Node):
         super().__init__('license_plate_3d')
 
         self.bridge = CvBridge()
+        self.enabled = True
 
         pkg_share = get_package_share_directory('rgbd_yolo_3d')
         model_path = os.path.join(
@@ -66,6 +68,12 @@ class LicensePlate3D(Node):
 
         self.pub_det3d = self.create_publisher(
             Detection3DArray, '/license_plate/detection3d', 10)
+        
+        self.enable_srv = self.create_service(
+            SetBool,
+            '/license_plate_3d/enable',
+            self.enable_cb
+        )
 
         self.get_logger().info('License plate 3D pose node started')
 
@@ -85,6 +93,15 @@ class LicensePlate3D(Node):
             self.depth = depth.astype(np.float32) / 1000.0
         else:
             self.depth = depth.astype(np.float32)
+
+    def enable_cb(self, request, response):
+        self.enabled = request.data
+        state = 'ENABLED' if self.enabled else 'DISABLED'
+        self.get_logger().info(f'LicensePlate3D {state}')
+        response.success = True
+        response.message = state
+        return response
+
 
     def lookup_T(self):
         try:
@@ -151,6 +168,9 @@ class LicensePlate3D(Node):
         return pos, yaw
 
     def process(self, stamp):
+        if not self.enabled:
+            return
+        
         if self.rgb is None or self.depth is None or self.fx is None:
             return
 
