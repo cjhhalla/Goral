@@ -126,5 +126,6 @@
 
     <xacro:include filename="$(find go2_description)/xacro/velodyne.xacro"/>
     <!-- <xacro:include filename="$(find go2_description)/xacro/laser.xacro"/> -->
+    <xacro:include filename="$(find go2_description)/xacro/realsense_rgbd.xacro"/>
 
 </robot>
