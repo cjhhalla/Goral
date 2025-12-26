@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<sdf version="1.5">
+<model name="car_plate">
+  <pose>0 0 0 0 0 0</pose>
+  <static>true</static>
+    <link name="link">
+      <inertial>
+        <mass>1.0</mass>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>1 1 1</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <cast_shadows>false</cast_shadows>
+	<geometry>
+          <mesh>
+            <uri>model://car_plate/meshes/car_plate.dae</uri>
+            <scale>0.1 0.1 0.1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
