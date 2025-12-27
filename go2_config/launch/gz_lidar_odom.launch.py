@@ -9,12 +9,18 @@ from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     ExecuteProcess,
+    SetEnvironmentVariable,
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
+    
+    # Gazebo 모델 경로 설정
+    gazebo_model_path = os.getenv('GAZEBO_MODEL_PATH', '')
+    new_model_path = os.path.expanduser('/home/minwoo/ros2_ws/src/Goral/go2_config/models')
+    combined_model_path = f"{gazebo_model_path}:{new_model_path}" if gazebo_model_path else new_model_path
 
     use_sim_time = LaunchConfiguration("use_sim_time")
     description_path = LaunchConfiguration("description_path")
@@ -170,6 +176,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            SetEnvironmentVariable(name='GAZEBO_MODEL_PATH', value=combined_model_path),
             declare_use_sim_time,
             declare_rviz,
             declare_robot_name,

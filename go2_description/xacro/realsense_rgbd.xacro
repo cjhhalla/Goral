@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ========================= -->
+  <!-- Parameters -->
+  <!-- ========================= -->
+  <xacro:property name="camera_name" value="realsense"/>
+  <xacro:property name="parent_link" value="base_link"/>
+
+  <!-- mounting pose (override 가능) -->
+  <xacro:property name="xyz" value="0.22 0 0.15"/>
+  <xacro:property name="rpy" value="0 -0.17 0"/>
+
+  <!-- ========================= -->
+  <!-- Camera Mount -->
+  <!-- ========================= -->
+  <joint name="${camera_name}_mount_joint" type="fixed">
+    <origin xyz="${xyz}" rpy="${rpy}"/>
+    <parent link="${parent_link}"/>
+    <child link="${camera_name}_link"/>
+  </joint>
+
+  <link name="${camera_name}_link">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-4" ixy="0" ixz="0"
+               iyy="1e-4" iyz="0"
+               izz="1e-4"/>
+    </inertial>
+
+    <visual>
+      <geometry>
+        <box size="0.025 0.09 0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.025 0.009 0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- ========================= -->
+  <!-- Optical Frames -->
+  <!-- ========================= -->
+
+  <!-- RGB optical frame -->
+  <joint name="${camera_name}_rgb_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+    <parent link="${camera_name}_link"/>
+    <child link="${camera_name}_rgb_optical_frame"/>
+  </joint>
+
+  <link name="${camera_name}_rgb_optical_frame"/>
+
+  <!-- Depth optical frame -->
+  <joint name="${camera_name}_depth_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+    <parent link="${camera_name}_link"/>
+    <child link="${camera_name}_depth_optical_frame"/>
+  </joint>
+
+  <link name="${camera_name}_depth_optical_frame"/>
+
+  <!-- ========================= -->
+  <!-- Gazebo Sensors -->
+  <!-- ========================= -->
+
+<gazebo reference="${camera_name}_link">
+  <sensor name="${camera_name}_camera" type="depth">
+    <pose>0 0 0 0 0 0</pose>
+    <update_rate>30</update_rate>
+
+    <camera>
+      <horizontal_fov>1.047</horizontal_fov>
+      <image>
+        <width>1280</width>
+        <height>720</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>0.1</near>
+        <far>10.0</far>
+      </clip>
+    </camera>
+
+    <plugin name="realsense_camera_plugin"
+            filename="libgazebo_ros_camera.so">
+      <ros>
+        <namespace>/</namespace>
+      </ros>
+
+      <camera_name>${camera_name}</camera_name>
+      <frame_name>${camera_name}_rgb_optical_frame</frame_name>
+
+      <!-- RGB -->
+      <image_topic_name>color/image_raw</image_topic_name>
+      <camera_info_topic_name>color/camera_info</camera_info_topic_name>
+
+      <!-- Depth -->
+      <depth_image_topic_name>depth/image_raw</depth_image_topic_name>
+      <depth_camera_info_topic_name>depth/camera_info</depth_camera_info_topic_name>
+
+      <!-- PointCloud -->
+      <point_cloud>true</point_cloud>
+      <point_cloud_topic_name>depth/points</point_cloud_topic_name>
+      <point_cloud_frame_name>${camera_name}_depth_optical_frame</point_cloud_frame_name>
+    </plugin>
+  </sensor>
+</gazebo>
+
+
+</robot>

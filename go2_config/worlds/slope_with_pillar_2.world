@@ -941,6 +941,22 @@
   <pose>-5 -10 5.0 0 0 0</pose>
 </model>
 
+<model name="car1">
+    <pose>4.59 1.46 0.001 0 0 3.14</pose>
+    <static>true</static>
+    <include merge="true">
+        <uri>model://suv</uri>
+    </include>
+</model>
+
+<model name="car_plate">
+    <pose>2.07 1.437 0.94 -1.57 0 1.57</pose>
+    <static>true</static>
+    <include merge="true">
+        <uri>model://car_plate</uri>
+    </include>
+</model>
+
     <!-- 物理與場景 -->
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
